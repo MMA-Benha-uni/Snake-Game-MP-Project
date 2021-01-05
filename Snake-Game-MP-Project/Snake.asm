@@ -22,9 +22,9 @@ main PROC                       ; used to show menus and setup the game for the 
     CALL Randomize              
     CALL Clrscr                 
     MOV EDX, OFFSET menus      
-    CALL WriteString            
+    CALL WriteString            ;write menu string
 
-    wait1:                      
+    wait1:                      ;choose from menu
     CALL ReadChar
 
     CMP AL, '1'                 
@@ -41,7 +41,7 @@ main PROC                       ; used to show menus and setup the game for the 
                                 
     EXIT
 
-    level:                    
+    level:                    ;choose level
     CALL Clrscr                 
     MOV EDX, OFFSET levels   
     CALL WriteString            
@@ -78,7 +78,7 @@ main PROC                       ; used to show menus and setup the game for the 
     CALL GenLevel   ;to be implemented
     JMP menu
 
-    speed:                    
+    speed:                 ; choose speed   
     CALL Clrscr                 
     MOV EDX, OFFSET speedS      
     CALL WriteString            
@@ -134,17 +134,7 @@ main PROC                       ; used to show menus and setup the game for the 
 
 
 
-
-
-
-
-
-
-
-
-
 main ENDP
-
 
 
 
