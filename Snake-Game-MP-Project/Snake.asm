@@ -137,12 +137,76 @@ main PROC                       ; used to show menus and setup the game for the 
 main ENDP
 
 
+          paint PROC USES EAX EBX EDX ESI
+
+          MOV EAX , blue + (white *16)  ; set background color to white and foreground to blue
+          CALL SetTextColor
+
+          MOV DH, 0  ; set row num to zero
+
+                    loop1:
+                     CMP DH, 24 ; loop over index of rows
+                      JGE endloop1
+                     MOV DL, 0  ; set column num to zero
+      
+                           loop2:
+                                   CMP DL, 80  ; loop over index of columns
+                                 JGE endloop2
+           
+                                   call GOTOXY ; move cursor to current position
+           
+                                   MOV BL, DH  ; store row value in bl
+                                   MOV AL, 80  
+                                   MUL BL      
+                                   PUSH DX    ; store value of dx
+                                   MOV DH, 0  ; clear upper bites of dx
+                                   ADD AX, DX ; store index of pixel in ax
+                                   POP DX     ; restore value of dx
+       
+                                   MOV ESI, 0 ; clear index reg
+                                   MOV SI, AX ; si has pixel address
+                                   SHL SI, 1  ; shift left by 1 word to fit 32 bit 
+                                   MOV BX, a[SI] ; value of pixel 
+                                                 ; now bx has pixel value to start printing we will compare it
+                                   
+                                   CMP BX, 0  
+                                   JE noPrint    ; empty pixel
+                                   
+                                   CMP BX, 0FFFFh ; wall pixel
+                                   JE printHurdle ; jump to printing wall segment
+                                   
+                                   MOV AL, ' ' ; if not empty pixel and not wall pixel so it's part
+                                   CALL WriteChar ; of snake pixel so print space
+                                   JMP noPrint 
+                                   
+                                   printHurdle:         ; to print walls
+                                   MOV EAX, blue + (yellow *16) ; set wall color to yellow 
+                                   call SetTextColor
+                                   MOV AL, ' '                   ; print white space
+                                   CALL WriteChar
+                                   
+                                   MOV EAX, blue + (white * 16)  ; return text color to blue 
+                                   CALL SetTextColor             ; foreground and white background
+                                   
+                                   noPrint:
+                                   INC DL                        ; increment column num
+                                   JMP loop2                     ; get back to loop over columns
+                                  
+                             endloop2:
+                                   INC DH                        ; increment row num
+                                   JMP loop1                     ; get back to loop over rows
+                               
+                     endLoop1:
+                              RET 
+
+          paint ENDP 
+
+
+          genLevel PROC 
 
 
 
-
-
-
+          genLevel ENDP
 
 
 
