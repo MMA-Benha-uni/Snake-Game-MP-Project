@@ -73,13 +73,13 @@ main PROC                       ; used to show menus and setup the game for the 
     JMP wait2                   
 
     level1:  
-    CALL clearMem          ; to be implemented     
+    CALL clearMem              
     MOV AL, 1
     CALL GenLevel ; to be implemented
     JMP menu
 
     level2: 
-    CALL clearMem    ; to be implemented
+    CALL clearMem    
     MOV AL, 2 
     CALL GenLevel    ; to be implemented
     JMP menu
