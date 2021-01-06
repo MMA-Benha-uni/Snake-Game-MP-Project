@@ -14,6 +14,18 @@ hit    BYTE "Game Over!", 0
 score  BYTE "Score: 0", 0
 gamespeed DWORD   60 ;
 
+tR BYTE 16d
+tC BYTE 47d
+hR BYTE 13d
+hC BYTE 47d
+eTail   BYTE    1d  
+search  WORD    0d 
+eGame   BYTE    0d  
+cScore  DWORD   0d  
+d       BYTE    'w' 
+newD    BYTE    'w' 
+
+
 .CODE
 
 main PROC                       ; used to show menus and setup the game for the user and then start it
@@ -208,7 +220,33 @@ main ENDP
 
           genLevel ENDP
 
-
+          clearMem PROC
+              MOV BX, 0
+              MOV DH, 0
+              outerLoop:
+                  CMP DH, 24
+                  JE ExitOut
+                  MOV DL, 0
+                  innerLoop:
+                      CMP DL, 80
+                      JE ExitIn
+                      call saveIndex
+                      INC DL
+                      JMP innerLoop
+                  ExitIn:
+                      INC DH
+                      JMP outerLoop
+              MOV tR, 16              
+              MOV tC, 47              
+              MOV hR, 13              
+              MOV hC, 47
+              MOV eGame, 0            
+              MOV eTail, 1            
+              MOV d, 'w'              
+              MOV newD, 'w'           
+              MOV cScore, 0 
+              RET
+          clearMem ENDP
 
 
 END main
