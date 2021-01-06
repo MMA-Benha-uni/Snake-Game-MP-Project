@@ -85,7 +85,7 @@ main PROC                       ; used to show menus and setup the game for the 
     JMP menu
 
     level3: 
-    CALL clearMem   ;to be implemented
+    CALL clearMem   
     MOV AL, 3    
     CALL GenLevel   ;to be implemented
     JMP menu
@@ -220,7 +220,7 @@ main ENDP
 
           genLevel ENDP
 
-          clearMem PROC
+          clearMem PROC                ;used to restore defaults after losing
               MOV BX, 0
               MOV DH, 0
               outerLoop:
@@ -230,7 +230,7 @@ main ENDP
                   innerLoop:
                       CMP DL, 80
                       JE ExitIn
-                      call saveIndex
+                      call saveIndex         ;TO DO
                       INC DL
                       JMP innerLoop
                   ExitIn:
