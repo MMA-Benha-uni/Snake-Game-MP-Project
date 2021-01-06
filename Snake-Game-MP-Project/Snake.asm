@@ -236,6 +236,7 @@ main ENDP
                   ExitIn:
                       INC DH
                       JMP outerLoop
+              ExitOut:
               MOV tR, 16              
               MOV tC, 47              
               MOV hR, 13              
