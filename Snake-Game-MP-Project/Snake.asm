@@ -135,7 +135,7 @@ main PROC                       ; used to show menus and setup the game for the 
     CALL Clrscr           
     CALL initSnake        ;to be implemented       
     CALL Paint            ;to be implemented          
-    CALL createFood       ;to be implemented         
+    CALL createFood              
     CALL startGame        
     MOV EAX, white + (black * 16)
     CALL SetTextColor          
@@ -190,7 +190,7 @@ createFood PROC USES EAX EBX EDX   ;generates food for the snake
     MOV DH, AL
 
 
-    CALL accessIndex            
+    CALL accessIndex            ;to be implemented  
 
     CMP BX, 0                   
     JNE check                    
