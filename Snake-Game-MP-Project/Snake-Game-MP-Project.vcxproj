@@ -19,7 +19,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <MASM Include="Snake.asm" />
+    <MASM Include="Snake.asm">
+      <IncludePaths Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">E:\college\Microprocessors\project\Irvine;%(IncludePaths)</IncludePaths>
+    </MASM>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

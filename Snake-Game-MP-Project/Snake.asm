@@ -136,11 +136,32 @@ main PROC                       ; used to show menus and setup the game for the 
 
 main ENDP
 
+initSnake PROC USES  EBX EDX ECX
 
+; This procedure initializes the snake to the default position
+; in almost the center of the screen
+    .data
+    
+        cRow BYTE 13
+        cColumn BYTE 47
+        tmpCounter word 1
 
+    .code
 
+    MOV cx , 4
+    linit:
+       MOV DH, cRow
+       INC cRow
+       MOV DL, cColumn
+       MOV Bx, tmpCounter
+       INC tmpCounter
+       CALL saveIndex
+       loop linit
 
+       
+    RET
 
+initSnake ENDP
 
 
 
