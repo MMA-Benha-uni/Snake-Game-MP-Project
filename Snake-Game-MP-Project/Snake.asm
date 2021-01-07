@@ -25,7 +25,13 @@ cScore  DWORD   0d
 d       BYTE    'w' 
 newD    BYTE    'w' 
 foodR BYTE 0           
-foodC BYTE 0           
+foodC BYTE 0  
+
+myHandle DWORD ?
+numInp   DWORD ?    
+temp BYTE 16 DUP(?) 
+bRead    DWORD ? 
+
 
 .CODE
 
@@ -327,6 +333,110 @@ CalcIndex PROC USES EAX EDX
    
         RET
  CalcIndex ENDP
+ 
+ startGame PROC USES EAX EBX ECX EDX
+    MOV EAX, white + (black * 16)
+    CALL setTextColor
+
+    MOV DH, 24
+    MOV DL, 0
+    CALL GotoXY
+
+    MOV EDX, OFFSET scoreS
+    CALL WriteString
+
+    INVOKE getStdHandle, STD_INPUT_HANDLE
+    MOV myHandle, EAX
+    MOV ECX, 10
+
+    INVOKE ReadConsoleInput, myHandle, ADDR temp, 1, ADDR bRead
+    INVOKE ReadConsoleInput, myHandle, ADDR temp, 1, ADDR bRead
+
+    gameLoop:
+        INVOKE GetNumberOfConsoleInputEvents, myHandle, ADDR numInp
+        MOV ECX, numInp
+
+        ;check if the buffer is empty and continue
+        CMP ECX, 0                          
+        JE finished
+
+        ;read one event from input buffer and save it at temp
+        INVOKE ReadConsoleInput, myHandle, ADDR temp, 1, ADDR bRead
+
+        ;check if input is KEY_EVENT
+
+        MOV DX, WORD PTR temp               
+        CMP DX, 1                           
+        JNE IgnoreEvent                       
+
+        MOV DL, BYTE PTR [temp+4]
+        CMP DL, 0
+        JE SkipEvent
+        MOV DL, BYTE PTR [temp+10]  ; Copy pressed key into DL
+
+        ;check if ESC is pressed and Exit the game if so
+        CMP DL, 1Bh                 
+        JE quit  
+
+        ;check if the snake is moving vertical 
+        CMP d, 'w'                  
+        JE moveHorizontal                    
+        CMP d, 's'                  
+        JE moveHorizontal                    
+
+        ;the snake is moving horizontal
+        JMP moveVertical
+
+        moveHorizontal:
+            CMP DL, 25h             ;check if left arrow was in input
+            JE moveLeft
+            CMP DL, 27h             ;check if right arrow was in input
+            JE moveRight
+            JMP IgnoreEvent
+
+            moveLeft:
+                MOV newD, 'a'       ;set new direction to left
+                JMP IgnoreEvent
+            moveRight:
+                MOV newD, 'd'       ;set new direction to right
+                JMP IgnoreEvent
+
+        moveVertical:
+            CMP DL, 26h             ;check if up arrow was in input
+            JE moveUp
+            CMP DL, 28h             ;check if down arrow was in input
+            JE moveDown
+            JMP IgnoreEvent           
+            moveUp:
+                MOV newD, 'w'       ;set new direction to up
+                JMP IgnoreEvent
+            moveDown:
+                MOV newD, 's'       ;set new direction to down
+                JMP IgnoreEvent
+
+    IgnoreEvent:
+        JMP gameLoop                            ;continue game loop
+
+    finished:
+
+        MOV BL, newD                        ;set new direction as snake
+                                            ;direction
+        MOV d, BL
+        CALL MoveSnake                      ;TO DO
+        MOV EAX, DelTime  
+        CALL Delay                          
+
+        CMP eGame, 1                        ;check if end game flag is set
+        JE Exit                             ;(from a collision)
+
+        JMP gameLoop                        ; Continue main loop
+
+        Exit:
+        CALL clearMem                    
+        MOV delTime, 100
+    RET
+  startGame ENDP
+
 
 END main
 
