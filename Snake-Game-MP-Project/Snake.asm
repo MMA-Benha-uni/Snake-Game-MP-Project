@@ -14,6 +14,18 @@ hit    BYTE "Game Over!", 0
 score  BYTE "Score: 0", 0
 gamespeed DWORD   60 ;
 
+tR BYTE 16d
+tC BYTE 47d
+hR BYTE 13d
+hC BYTE 47d
+eTail   BYTE    1d  
+search  WORD    0d 
+eGame   BYTE    0d  
+cScore  DWORD   0d  
+d       BYTE    'w' 
+newD    BYTE    'w' 
+
+
 .CODE
 
 main PROC                       ; used to show menus and setup the game for the user and then start it
@@ -28,7 +40,7 @@ main PROC                       ; used to show menus and setup the game for the 
     CALL ReadChar
 
     CMP AL, '1'                 
-    JE startGame
+    JE startG
 
     CMP AL, '2'                
     JE speed
@@ -61,19 +73,19 @@ main PROC                       ; used to show menus and setup the game for the 
     JMP wait2                   
 
     level1:  
-    CALL clearMem          ; to be implemented     
+    CALL clearMem              
     MOV AL, 1
     CALL GenLevel ; to be implemented
     JMP menu
 
     level2: 
-    CALL clearMem    ; to be implemented
+    CALL clearMem    
     MOV AL, 2 
     CALL GenLevel    ; to be implemented
     JMP menu
 
     level3: 
-    CALL clearMem   ;to be implemented
+    CALL clearMem   
     MOV AL, 3    
     CALL GenLevel   ;to be implemented
     JMP menu
@@ -134,27 +146,156 @@ main PROC                       ; used to show menus and setup the game for the 
 
 
 
-
-
-
-
-
-
-
-
-
 main ENDP
 
+initSnake PROC USES  EBX EDX ECX
+
+; This procedure initializes the snake to the default position
+; in almost the center of the screen
+    .data
+    
+        cRow BYTE 13
+        cColumn BYTE 47
+        tmpCounter word 1
+
+    .code
+
+    MOV cx , 4
+    linit:
+       MOV DH, cRow
+       INC cRow
+       MOV DL, cColumn
+       MOV Bx, tmpCounter
+       INC tmpCounter
+       CALL saveIndex
+       loop linit
+
+       
+    RET
+
+initSnake ENDP
 
 
 
+paint PROC USES EAX EBX EDX ESI
+
+        MOV EAX , blue + (white *16)  ; set background color to white and foreground to blue
+        CALL SetTextColor
+
+        MOV DH, 0  ; set row num to zero
+
+        loop1:
+            CMP DH, 24 ; loop over index of rows
+            JGE endloop1
+            MOV DL, 0  ; set column num to zero
+      
+                loop2:
+                        CMP DL, 80  ; loop over index of columns
+                        JGE endloop2
+           
+                        call GOTOXY ; move cursor to current position
+           
+                        MOV BL, DH  ; store row value in bl
+                        MOV AL, 80  
+                        MUL BL      
+                        PUSH DX    ; store value of dx
+                        MOV DH, 0  ; clear upper bites of dx
+                        ADD AX, DX ; store index of pixel in ax
+                        POP DX     ; restore value of dx
+       
+                        MOV ESI, 0 ; clear index reg
+                        MOV SI, AX ; si has pixel address
+                        SHL SI, 1  ; shift left by 1 word to fit 32 bit 
+                        MOV BX, a[SI] ; value of pixel 
+                                        ; now bx has pixel value to start printing we will compare it
+                                   
+                        CMP BX, 0  
+                        JE noPrint    ; empty pixel
+                                   
+                        CMP BX, 0FFFFh ; wall pixel
+                        JE printHurdle ; jump to printing wall segment
+                                   
+                        MOV AL, ' ' ; if not empty pixel and not wall pixel so it's part
+                        CALL WriteChar ; of snake pixel so print space
+                        JMP noPrint 
+                                   
+                        printHurdle:         ; to print walls
+                        MOV EAX, blue + (yellow *16) ; set wall color to yellow 
+                        call SetTextColor
+                        MOV AL, ' '                   ; print white space
+                        CALL WriteChar
+                                   
+                        MOV EAX, blue + (white * 16)  ; return text color to blue 
+                        CALL SetTextColor             ; foreground and white background
+                                   
+                        noPrint:
+                        INC DL                        ; increment column num
+                        JMP loop2                     ; get back to loop over columns
+                                  
+                    endloop2:
+                        INC DH                        ; increment row num
+                        JMP loop1                     ; get back to loop over rows
+                               
+            endLoop1:
+                    RET 
+
+paint ENDP 
 
 
+    genLevel PROC 
+    
+    ;TO BE IMPLEMENTED
+    genLevel ENDP
 
-
-
-
-
+clearMem PROC                
+        ;used to restore defaults after losing
+        MOV BX, 0
+        MOV DH, 0
+        outerLoop:
+            CMP DH, 24
+            JE ExitOut
+            MOV DL, 0
+            innerLoop:
+                CMP DL, 80
+                JE ExitIn
+                call saveIndex         ;TO DO
+                INC DL
+                JMP innerLoop
+            ExitIn:
+                INC DH
+                JMP outerLoop
+        ExitOut:
+        MOV tR, 16              
+        MOV tC, 47              
+        MOV hR, 13              
+        MOV hC, 47
+        MOV eGame, 0            
+        MOV eTail, 1            
+        MOV d, 'w'              
+        MOV newD, 'w'           
+        MOV cScore, 0 
+        RET
+clearMem ENDP
+          
+CalcIndex PROC USES EAX EDX             
+    ; This procedure used to calculat the value of the index, 
+    ; that i can access the value of our array or save the value to our array by it.
+    ; The value returned through SI register.         
+    
+        MOV BL, DH      
+        MOV AL, 80      
+        MUL BL          
+        PUSH DX         
+        MOV DH, 0       
+        ADD AX, DX      
+        POP DX         
+        MOV ESI, 0      
+        MOV SI, AX      
+   
+        SHL SI, 1      
+   
+        RET
+ CalcIndex ENDP
 
 END main
 
