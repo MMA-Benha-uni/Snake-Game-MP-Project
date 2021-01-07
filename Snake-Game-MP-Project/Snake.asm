@@ -376,7 +376,7 @@ CalcIndex PROC USES EAX EDX
 
         ;check if ESC is pressed and Exit the game if so
         CMP DL, 1Bh                 
-        JE quit  
+        JE Exit  
 
         ;check if the snake is moving vertical 
         CMP d, 'w'                  
