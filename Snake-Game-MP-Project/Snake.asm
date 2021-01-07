@@ -248,6 +248,25 @@ main ENDP
               MOV cScore, 0 
               RET
           clearMem ENDP
+          
+          CalcIndex PROC USES EAX EDX             ; This procedure used to calculat the value of the index, 
+          ; that i can access the value of our array or save the value to our array by it.
+          ; The value returned through SI register.         
+    
+              MOV BL, DH      
+              MOV AL, 80      
+              MUL BL          
+              PUSH DX         
+              MOV DH, 0       
+              ADD AX, DX      
+              POP DX         
+              MOV ESI, 0      
+              MOV SI, AX      
+   
+              SHL SI, 1      
+   
+              RET
+          CalcIndex ENDP
 
 
 END main
