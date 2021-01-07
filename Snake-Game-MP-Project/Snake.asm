@@ -24,7 +24,8 @@ eGame   BYTE    0d
 cScore  DWORD   0d  
 d       BYTE    'w' 
 newD    BYTE    'w' 
-
+foodR BYTE 0           
+foodC BYTE 0           
 
 .CODE
 
@@ -176,6 +177,36 @@ initSnake PROC USES  EBX EDX ECX
 initSnake ENDP
 
 
+createFood PROC USES EAX EBX EDX   ;generates food for the snake
+
+
+    check:   
+    MOV EAX, 80                 
+    CALL RandomRange            
+    MOV DL, AL
+
+    MOV EAX, 24                 
+    CALL RandomRange            
+    MOV DH, AL
+
+
+    CALL accessIndex            
+
+    CMP BX, 0                   
+    JNE check                    
+
+    MOV foodR, DH                 
+    MOV foodC, DL                 
+
+    MOV EAX, white + (Magenta * 16)
+    CALL setTextColor
+    CALL GotoXY                 
+    MOV AL, ' '                 
+    CALL WriteChar
+
+    RET
+
+createFood ENDP
 
 paint PROC USES EAX EBX EDX ESI
 
