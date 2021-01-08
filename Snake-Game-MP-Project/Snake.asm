@@ -479,16 +479,25 @@ CalcIndex PROC USES EAX EDX
         RET
  CalcIndex ENDP
  
- saveIndex PROC USES EAX ESI EDX        ; This procedure saved value of BX in our array of index, that get value of the index 
-; by the value that returned from CalcIndex procedure and saved in the register SI. 
+ saveIndex PROC USES EAX ESI EDX                  ; This procedure saved value of BX in our array of index, that get value of the index 
+ ; by the value that returned from CalcIndex procedure and saved in the register SI. 
 
         PUSH EBX        
         CALL CalcIndex
         POP EBX         
         MOV a[SI], BX   
-    RET
-saveIndex ENDP
+        RET
+ saveIndex ENDP
  
+ accessIndex PROC USES EAX ESI EDX                ; This procedure accesses the value of the array of index, that get value of the index 
+ ; by the value that returned from CalcIndex procedure and saved in the register SI. 
+ ; that saved in SI register, and returend the value of it in the register BBX
+
+        CALL CalcIndex
+        MOV BX, a[SI]   
+        RET
+
+ accessIndex ENDP
  
  startGame PROC USES EAX EBX ECX EDX
     MOV EAX, white + (black * 16)
