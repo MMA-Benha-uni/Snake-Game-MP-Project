@@ -281,7 +281,152 @@ paint ENDP
 
     genLevel PROC 
     
-    ;TO BE IMPLEMENTED
+     CMP AL, 1               ; Check if level choice is without obstacles
+    JNE nextL               ; If not, jump to next level selection
+
+    RET                     ; Exit procedure, don't generate any obstacles.
+
+    nextL:                  ; Check if level choic is box level
+    CMP AL, 2
+    JNE nextL2              ; If not, jump to next level selection
+
+    MOV DH, 0               ; first row
+    MOV BX, 0FFFFh          ; Set data to be written to indicate to print or not
+
+    rLoop:                  ; Loop for generating vertical line
+        CMP DH, 24          ; Check if bottom of screen reached          
+        JE endRLoop         ; Break if bottom of screen is reched
+
+        MOV DL, 0           ; first column from left
+        CALL saveIndex      ; Write value stored in BX to framebuffer
+        MOV DL, 79          ; last column
+        CALL saveIndex      ; Write value stored in BX to framebuffer
+        INC DH              ; Increment row value
+        JMP rLoop           ; Continue loop
+    endRLoop:
+
+    MOV DL, 0               ; Set column index to 0
+
+    cLoop:                  ; Loop for generating horizontal lines
+        CMP DL, 80          ; Check if end of screen from right is reached
+        JE endCLoop         ; Break if right side of screen is reached
+
+        MOV DH, 0           ; first row
+        CALL saveIndex      ; Write value stored in BX to framebuffer
+        MOV DH, 23          ; last row
+        CALL saveIndex      ; Write value stored in BX to framebuffer
+        INC DL              ; Increment column value
+        JMP cLoop           ; Continue loop
+
+        endCLoop:
+
+    RET
+   
+
+    nextL2:                 ; Section for generating frame level
+
+        MOV newD, 'd'       ; Set the default direction to down, as not to run
+        MOV DH, 0           ; immediately into a wall
+        MOV DL, 0           ; Set row and column numbers to 0 and 0
+        MOV BX, 0FFFFh      ; set value of bx to pass to print proc
+
+        cLoop2:             ; Loop for printing the first horizontal line at top left of screen (row 0 col 0)                         
+            CMP DL, 8      ; print first 7  horizontal pixels 
+            JE endCLoop2
+
+            CALL saveIndex  ; Write  value to framebuffer                          first row at left
+            INC DL          ; Increment column number
+            JMP cLoop2      ; loop for first 7 pixels
+
+        endCloop2:          ; Prepare for printing the bottom left row
+        MOV DH, 23           ; at bottom of screen
+        MOV DL, 0          ; start from first column
+
+        cLoop3:             ; Loop for painting bottom left row                      
+            CMP DL, 8      ; first 7 horizontal pixels at last row
+            JE endCLoop3
+
+            CALL saveIndex  ; Write value to framebuffer
+            INC DL          ; Increment column number
+            JMP cLoop3      ; loop for first 7 pixels at last row
+
+         endCloop3:          ; Prepare for printing the top right row
+        MOV DH, 0           ; Set to first row
+        MOV DL, 71          ; to print on last 7 pixels of first row
+
+        cLoop4:             ; Loop for painting top right row
+            CMP DL, 79      ; Check if right side of screen was reached                     
+            JE endCLoop4
+
+            CALL saveIndex  ; Write  value to framebuffer
+            INC DL          ; Increment column number
+            JMP cLoop4      ; loop over last 7 pixels of first row
+
+            endCloop4:          ; Prepare for bottom right row
+        MOV DH, 23           ; Start from last row
+        MOV DL, 71          ; last 7 pixels of last row will be painted
+
+        cLoop5:             ; Loop for painting last row at right                                        
+            CMP DL, 79      ; Check if right side of screen was reached
+            JE endCLoop5
+
+            CALL saveIndex  ; Write  value to framebuffer
+            INC DL          ; Increment column number
+            JMP cLoop5      ; loop over last 7 pixels of last row
+
+            endCloop5:          ; Prepare for vertical lines painting
+        MOV DH, 0           ; Start from first row
+        MOV DL, 0           ; and first column
+        
+       
+
+        rLoop2:             ; Loop for painting top left vertical line
+            CMP DH, 7      ; first 7 vertical pixels
+            JE endRLoop2
+
+            CALL saveIndex  ; Write value to framebuffer
+            INC DH          ; Increment row number
+            JMP rLoop2      ; Continue until looping over first 7 vertical pixels
+
+        endRLoop2:          ; prepare to paint bottom left 7 pixels
+            MOV DH, 15      ; last 7 vertical pixels
+            MOV DL, 0       ; first column
+
+             rLoop3:             ; Loop for patining a last 7 vertical pixels at left
+            CMP DH, 23      ; if bottom of screen is reached
+            JE endRLoop3
+
+            CALL saveIndex  ; Write value to framebuffer
+            INC DH          ; Increment row number
+            JMP rLoop3      ; Continue until bottom of screen is reached
+
+        endRLoop3:          ; prepare to paint top right 7 pixels
+            MOV DH, 0       ; first row
+            MOV DL, 79      ; last column
+
+            rLoop4:         ; Loop for patining a first 7 vertical pixels at right
+            CMP DH, 7       ; first 7 vertical pixels  
+            JE endRLoop4
+
+            CALL saveIndex  ; Write value to framebuffer
+            INC DH          ; Increment row number
+            JMP rLoop4      ; Continue until painting first 7 vertical right pixels
+
+        endRLoop4:          ; prepare to paint bottom right 7 pixels
+            MOV DH,15       ; last 7 vertical pixel
+            MOV DL, 79      ; last row
+
+            rLoop5:         ; Loop for patining last 7 vertical pixels
+            CMP DH, 24      ; check if bottom of screen is reached
+            JE endRLoop5
+
+            CALL saveIndex  ; Write value to framebuffer
+            INC DH          ; Increment row number
+            JMP rLoop5      ; Continue until bottom of screen is reached
+
+        endRLoop5:          ; Return from procedure after painting 
+            RET 
+    
     genLevel ENDP
 
 clearMem PROC                
