@@ -7,7 +7,7 @@ a WORD 1920 DUP (0)
 menus BYTE " 1-start game",0dh,0ah,"2-speed",0Dh,0Ah,
           "3-level",0dh,0ah,"4- Exit",0Dh,0Ah, 0
 
-levels  BYTE "1. None", 0Dh, 0Ah, "2. Box", 0Dh, 0Ah, "3. Rooms", 0Dh, 0Ah, 0
+levels  BYTE "1. None", 0Dh, 0Ah, "2. Box", 0Dh, 0Ah, "3. camera frame", 0Dh, 0Ah, 0
 speeds BYTE "1", 0Dh, 0Ah, "2", 0Dh, 0Ah, "3",
              0Dh, 0Ah, "4", 0Dh, 0Ah, 0
 hit    BYTE "Game Over!", 0
@@ -323,7 +323,7 @@ paint ENDP
     RET
    
 
-    nextL2:                 ; Section for generating frame level
+    nextL2:                 ; Section for generating camera frame level
 
         MOV newD, 'd'       ; Set the default direction to down, as not to run
         MOV DH, 0           ; immediately into a wall
