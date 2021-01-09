@@ -11,7 +11,7 @@ levels  BYTE "1. None", 0Dh, 0Ah, "2. Box", 0Dh, 0Ah, "3. camera frame", 0Dh, 0A
 speeds BYTE "1", 0Dh, 0Ah, "2", 0Dh, 0Ah, "3",
              0Dh, 0Ah, "4", 0Dh, 0Ah, 0
 hit    BYTE "Game Over!", 0
-score  BYTE "Score: 0", 0
+scoreS  BYTE "Score: 0", 0
 gamespeed DWORD   60 ;
 
 tR BYTE 16d
@@ -536,12 +536,12 @@ CalcIndex PROC USES EAX EDX
 
         MOV DL, BYTE PTR [temp+4]
         CMP DL, 0
-        JE SkipEvent
+        JE IgnoreEvent
         MOV DL, BYTE PTR [temp+10]  ; Copy pressed key into DL
 
         ;check if ESC is pressed and Exit the game if so
         CMP DL, 1Bh                 
-        JE Exit  
+        JE quit  
 
         ;check if the snake is moving vertical 
         CMP d, 'w'                  
@@ -588,17 +588,17 @@ CalcIndex PROC USES EAX EDX
                                             ;direction
         MOV d, BL
         CALL MoveSnake                      ;TO DO
-        MOV EAX, DelTime  
+        MOV EAX, gamespeed  
         CALL Delay                          
 
         CMP eGame, 1                        ;check if end game flag is set
-        JE Exit                             ;(from a collision)
+        JE quit                             ;(from a collision)
 
         JMP gameLoop                        ; Continue main loop
 
-        Exit:
+        quit:
         CALL clearMem                    
-        MOV delTime, 100
+        MOV gamespeed, 100
     RET
   startGame ENDP
 
