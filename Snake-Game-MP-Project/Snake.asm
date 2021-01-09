@@ -82,22 +82,22 @@ main PROC                       ; used to show menus and setup the game for the 
     level1:  
     CALL clearMem              
     MOV AL, 1
-    CALL GenLevel ; to be implemented
+    CALL GenLevel 
     JMP menu
 
     level2: 
     CALL clearMem    
     MOV AL, 2 
-    CALL GenLevel    ; to be implemented
+    CALL GenLevel    
     JMP menu
 
     level3: 
     CALL clearMem   
     MOV AL, 3    
-    CALL GenLevel   ;to be implemented
+    CALL GenLevel   
     JMP menu
 
-    speed:                 ; choose speed   
+    speed:                 ; choose speed  
     CALL Clrscr                 
     MOV EDX, OFFSET speedS      
     CALL WriteString            
@@ -139,8 +139,8 @@ main PROC                       ; used to show menus and setup the game for the 
     MOV EAX, 0                 
     MOV EDX, 0 
     CALL Clrscr           
-    CALL initSnake        ;to be implemented       
-    CALL Paint            ;to be implemented          
+    CALL initSnake            
+    CALL Paint                    
     CALL createFood              
     CALL startGame        
     MOV EAX, white + (black * 16)
@@ -196,7 +196,7 @@ createFood PROC USES EAX EBX EDX   ;generates food for the snake
     MOV DH, AL
 
 
-    CALL accessIndex            ;to be implemented  
+    CALL accessIndex              
 
     CMP BX, 0                   
     JNE check                    
