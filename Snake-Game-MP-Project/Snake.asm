@@ -4,7 +4,7 @@ INCLUDE Irvine32.inc
 
 a WORD 1920 DUP (0)
 
-menus BYTE " 1-start game",0dh,0ah,"2-speed",0Dh,0Ah,
+menus BYTE ".----------------.| snake the game |'----------------'", 0Dh, 0Ah, " 1-start game",0dh,0ah,"2-speed",0Dh,0Ah,
           "3-level",0dh,0ah,"4- Exit",0Dh,0Ah, 0
 
 levels  BYTE "1. None", 0Dh, 0Ah, "2. Box", 0Dh, 0Ah, "3. camera frame", 0Dh, 0Ah, 0
