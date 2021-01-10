@@ -39,14 +39,10 @@ menus BYTE ".----------------.| snake the game |'----------------'", 0Dh, 0Ah, "
 levels  BYTE "1. None", 0Dh, 0Ah, "2. Box", 0Dh, 0Ah, "3. camera frame", 0Dh, 0Ah, 0
 speeds BYTE "1", 0Dh, 0Ah, "2", 0Dh, 0Ah, "3",
              0Dh, 0Ah, "4", 0Dh, 0Ah, 0
-hit    BYTE "Game Over!", 0
+hitS    BYTE "Game Over!", 0
 scoreS  BYTE "Score: 0", 0
 gamespeed DWORD   60 ;
 
-tR BYTE 16d
-tC BYTE 47d
-hR BYTE 13d
-hC BYTE 47d
 eTail   BYTE    1d  
 search  WORD    0d 
 eGame   BYTE    0d  
@@ -61,9 +57,6 @@ numInp   DWORD ?
 temp BYTE 16 DUP(?) 
 bRead    DWORD ? 
 
-tmpCounter word 1d
-cRow       BYTE 13d
-cColumn    BYTE 47d
 
 
 .CODE
@@ -387,9 +380,9 @@ MoveSnake PROC USES EDX EAX EBX
     ;checkFood
     ;---------------------------------------------------
     
-    .IF fr != DH
+    .IF foodR != DH
         JMP ex
-    .ELSEIF fc != DL
+    .ELSEIF foodC != DL
         JMP ex
     .ENDIF
     ;---------------------------------------------------
