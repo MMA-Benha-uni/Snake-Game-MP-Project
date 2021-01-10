@@ -1,6 +1,35 @@
 INCLUDE Irvine32.inc
 
 .DATA
+;---------------------------------------------snakeData---------------------------------------------------
+segO struct
+    ; the main object that will be used to form the snake
+    ; could be used in creating other parts of the game like food seg or wall seg.
+
+    col byte ?  ; holds the column of the segment
+    row byte ?  ; holds the row of the segment
+segO ends
+
+
+segArray segO      {47,16},{47,15},{47,14},{47,13},1916 dup({0,0})  
+                    ; the array that will hold all the segments forming the snake
+                    ; with max 1920 word (the full FrameBuffer)
+                    ; with the first four segmants defined to the initial snake state
+                    ; the arr starts with the tail since i add only heads 
+
+
+tmpHead word ?      ; will hold the new head values
+tailIndex dd 0      ; get the index of the tail from the snake
+headIndex dd 6      ; get the index of the head from the snake
+
+noOfSegments dw 4
+
+cRow BYTE 13            ; The central Row
+cColumn BYTE 47         ; The central Column
+tmpCounter WORD 1       ; a Counter that will be used to assign the segmants,
+                        ; with there nums for the paint function
+;------------------------------------------------------------------------------------------------------------
+
 
 a WORD 1920 DUP (0)
 
@@ -159,6 +188,7 @@ main PROC                       ; used to show menus and setup the game for the 
 
 main ENDP
 
+;--------------------------------------------------------------snakeLogic----------------------------------------
 initSnake PROC USES EBX EDX ECX
 
 ; This procedure initializes the snake to the default position
@@ -180,6 +210,212 @@ initSnake PROC USES EBX EDX ECX
 
 initSnake ENDP
 
+getHead PROC USES EAX EDX
+
+    
+
+    LEA EAX, segArray
+    ADD EAX, headIndex
+    mov dx, [eax].segO
+    
+    mov tmpHead,dx
+    
+    RET
+getHead ENDP
+
+setHead PROC USES EAX EDX
+
+    
+    LEA EAX, segArray
+    mov dx, tmpHead
+    add headIndex, 2
+    add EAX, headIndex
+    mov [eax], dx
+    INC noOfSegments
+    CALL GotoXY            
+    MOV EAX, blue + (white * 16)
+    CALL setTextColor       
+    MOV AL, ' '             
+    CALL WriteChar
+    mov bx, noOfSegments
+    call saveIndex
+    MOV DH, 23              
+    MOV DL, 79
+    CALL GotoXY
+    
+
+    RET
+setHead ENDP
+
+
+MoveSnake PROC USES EDX EAX EBX
+    
+    
+    cmp eTail, 1
+    jne nEtail
+    eraseTail:
+        lea EAX, segArray
+        add EAX, tailIndex
+        mov dx, [eax]
+        CALL GotoXY            
+        MOV EAX, white + ( black * 16)
+        CALL setTextColor       
+        MOV AL, ' '             
+        CALL WriteChar
+        mov bx, 0
+        call saveIndex
+        MOV DH, 23              
+        MOV DL, 79
+        CALL GotoXY
+        ADD tailIndex, 2
+    
+    nEtail:
+    mov eTail, 1
+    CALL getHead   ; get the row and column of the current head and mov them to tmpHead
+    MOV DX, tmpHead
+
+    .IF d == 'w'
+        
+        CMP newD, 'w'
+        JE sameD
+        CMP newD, 's'
+        JE sameD
+
+        .IF newD == 'd'
+            ADD DL, 1
+        .ELSEIF newD == 'a'
+            SUB DL , 1
+        .ENDIF
+
+        sameD:
+            SUB DH,1
+
+    .ELSEIF d == 's'
+        
+        CMP newD, 'w'
+        JE sameD2
+        CMP newD, 's'
+        JE sameD2
+
+        .IF newD == 'd'
+            ADD DL, 1
+        .ELSEIF newD == 'a'
+            SUB DL, 1
+        .ENDIF
+
+        sameD2:
+            ADD DH,1
+
+    .ELSEIF d == 'd'
+        
+        CMP newD, 'a'
+        JE sameD3
+        CMP newD, 'd'
+        JE sameD3
+
+        .IF newD == 'w'
+            SUB DH, 1
+        .ELSEIF newD == 's'
+            ADD DH,1
+        .ENDIF
+        sameD3:
+            ADD DL,1
+
+    .ELSEIF d == 'a'
+        
+        CMP newD, 'a'
+        JE sameD4
+        CMP newD, 'd'
+        JE sameD4
+
+        .IF newD == 'w'
+            SUB DH,1
+        .ELSEIF newD == 's'
+            ADD DH,1
+        .ENDIF
+        sameD4:
+            SUB DL,1
+    .ENDIF
+
+
+    ;wrap
+    ;---------------------------------------------------
+    CMP DH, 24              ; Check if new index is getting off screen
+    JNE next
+        MOV DH, 1           ; Wrap index around screen
+
+    next:
+    CMP DL, 80              ; Chekc if new index is getting off screen
+    JNE next2
+        MOV DL, 1           ; Wrap index around screen
+
+    next2:
+    CMP DH, 0               ; Check if new index is getting off sreen
+    JGE next3
+        MOV DH, 23          ; Wrap index around screen
+
+    next3:
+    CMP DL, 0               ; Check if new index is getting off screen
+    JGE last
+        MOV DL, 79          ; Wrap index around screen
+    last:
+        NOP
+    ;---------------------------------------------------
+    ;checkCollision
+    ;---------------------------------------------------
+
+    call accessIndex
+
+    cmp BX, 0
+    jne hit
+
+    jmp nhit
+    hit: 
+        MOV EAX, 4000           ; Set delay time to 4000ms
+        MOV DH, 24              ; Move cursor to new location, to write game over
+        MOV DL, 11              ; message
+        CALL GotoXY
+        MOV EDX, OFFSET hitS
+        CALL WriteString
+
+        CALL Delay              ; Call delay to pause game for 4 seconds
+        MOV eGame, 1            ; Set end game flag
+        RET
+    nhit:
+        nop
+    ;---------------------------------------------------
+    ;checkFood
+    ;---------------------------------------------------
+    
+    .IF fr != DH
+        JMP ex
+    .ELSEIF fc != DL
+        JMP ex
+    .ENDIF
+    ;---------------------------------------------------
+     push edx
+     MOV DH, 24              ; Move cursor to new location, to update score
+     MOV DL, 7
+     CALL GotoXY       
+     MOV EAX, cScore         ; Move score to EAX and increment it
+     INC EAX
+     CALL WriteDec
+     MOV cScore, EAX         ; Copy updated score value back into memory
+     pop edx
+     ;-
+     call createFood
+     mov eTail, 0
+     ex:
+     ;---------------------------------------------------
+
+    MOV tmpHead, DX
+    CALL setHead
+
+    RET
+        
+MoveSnake ENDP
+
+;-----------------------------------------------------------------------------------------------------------------------------------------
 
 createFood PROC USES EAX EBX EDX   ;generates food for the snake
 
@@ -445,10 +681,14 @@ clearMem PROC
                 INC DH
                 JMP outerLoop
         ExitOut:
-        MOV tR, 16              
-        MOV tC, 47              
-        MOV hR, 13              
-        MOV hC, 47
+
+        
+        MOV cRow, 13            ; return the index to the initial positon
+        MOV cColumn, 47         ; return the index to the initial positon
+        MOV tmpCounter, 1       ; return the counter to the initial value
+        MOV headIndex, 6        ; return the index to the initial positon
+        MOV tailIndex, 0        ; return the index to the initial positon
+        
         MOV eGame, 0            
         MOV eTail, 1            
         MOV d, 'w'              

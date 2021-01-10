@@ -20,7 +20,10 @@
   </ItemGroup>
   <ItemGroup>
     <MASM Include="Snake.asm">
-      <IncludePaths Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">E:\college\Microprocessors\project\Irvine;%(IncludePaths)</IncludePaths>
+      <IncludePaths Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">E:\college\Microprocessors\project\Irvine</IncludePaths>
+      <IncludePaths Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">E:\college\Microprocessors\project\Irvine</IncludePaths>
+      <IncludePaths Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">E:\college\Microprocessors\project\Irvine</IncludePaths>
+      <IncludePaths Condition="'$(Configuration)|$(Platform)'=='Release|x64'">E:\college\Microprocessors\project\Irvine</IncludePaths>
     </MASM>
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -98,11 +101,11 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Users\abd el rahman\Downloads\Irvine;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>Irvine32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Users\abd el rahman\Downloads\Irvine;%(AdditionalLibraryDirectories);E:\college\Microprocessors\project\Irvine</AdditionalLibraryDirectories>
+      <AdditionalDependencies>Irvine32.lib</AdditionalDependencies>
     </Link>
     <MASM>
-      <IncludePaths>C:\Users\abd el rahman\Downloads\Irvine;%(IncludePaths)</IncludePaths>
+      <IncludePaths>E:\college\Microprocessors\project\Irvine</IncludePaths>
     </MASM>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -119,7 +122,12 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>Irvine32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>;E:\college\Microprocessors\project\Irvine</AdditionalLibraryDirectories>
     </Link>
+    <MASM>
+      <IncludePaths>E:\college\Microprocessors\project\Irvine</IncludePaths>
+    </MASM>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -131,7 +139,12 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>Irvine32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>;E:\college\Microprocessors\project\Irvine</AdditionalLibraryDirectories>
     </Link>
+    <MASM>
+      <IncludePaths>E:\college\Microprocessors\project\Irvine</IncludePaths>
+    </MASM>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -147,7 +160,12 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>Irvine32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>;E:\college\Microprocessors\project\Irvine</AdditionalLibraryDirectories>
     </Link>
+    <MASM>
+      <IncludePaths>E:\college\Microprocessors\project\Irvine</IncludePaths>
+    </MASM>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
