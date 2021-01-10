@@ -32,6 +32,10 @@ numInp   DWORD ?
 temp BYTE 16 DUP(?) 
 bRead    DWORD ? 
 
+tmpCounter word 1d
+cRow       BYTE 13d
+cColumn    BYTE 47d
+
 
 .CODE
 
@@ -155,19 +159,13 @@ main PROC                       ; used to show menus and setup the game for the 
 
 main ENDP
 
-initSnake PROC USES  EBX EDX ECX
+initSnake PROC USES EBX EDX ECX
 
 ; This procedure initializes the snake to the default position
-; in almost the center of the screen
-    .data
-    
-        cRow BYTE 13
-        cColumn BYTE 47
-        tmpCounter word 1
-
-    .code
+; in the center of the screen
 
     MOV cx , 4
+    
     linit:
        MOV DH, cRow
        INC cRow
