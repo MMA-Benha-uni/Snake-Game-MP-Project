@@ -39,12 +39,13 @@ menus BYTE ".----------------.| snake the game |'----------------'", 0Dh, 0Ah, "
 levels  BYTE "1. None", 0Dh, 0Ah, "2. Box", 0Dh, 0Ah, "3. camera frame", 0Dh, 0Ah, 0
 speeds BYTE "1", 0Dh, 0Ah, "2", 0Dh, 0Ah, "3",
              0Dh, 0Ah, "4", 0Dh, 0Ah, 0
+
 hitS    BYTE "Game Over!", 0
-highS    BYTE "Highest Score: 0",0
+highS    BYTE "Highest Score: ",0
 scoreS  BYTE "Score: 0", 0
 gamespeed DWORD   60 ;
 
-highestScore DWORD 0
+highestScore DWORD 0   ;holds the current highestScore
 
 eTail   BYTE    1d  
 search  WORD    0d 
@@ -172,8 +173,6 @@ main PROC                       ; used to show menus and setup the game for the 
     CALL Paint                    
     CALL createFood              
     CALL startGame        
-    MOV EAX, white + (black * 16)
-    CALL SetTextColor          
     JMP menu                  
 
 
@@ -375,9 +374,8 @@ MoveSnake PROC USES EDX EAX EBX
         CALL WriteString
         MOV EAX, cScore
         .IF EAX > highestScore
-            MOV DH, 24
-            MOV DL, 25
-            CALL WriteDec
+            MOV highestScore, EAX
+            MOV hFlag, 1
         .ENDIF
 
         CALL Delay              ; Call delay to pause game for 4 seconds
@@ -510,6 +508,13 @@ paint PROC USES EAX EBX EDX ESI
                         JMP loop1                     ; get back to loop over rows
                                
             endLoop1:
+                    MOV DH, 24
+                    MOV DL, 25
+                    CALL GotoXY
+                    MOV EAX, white + (black * 16)  ; return text color to blue 
+                    CALL SetTextColor             ; foreground and white background
+                    MOV EAX, highestScore
+                    CALL WriteDec
                     RET 
 
 paint ENDP 
