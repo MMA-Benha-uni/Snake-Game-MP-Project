@@ -26,7 +26,7 @@ noOfSegments dw 4
 
 cRow BYTE 13            ; The central Row
 cColumn BYTE 47         ; The central Column
-tmpCounter WORD 1       ; a Counter that will be used to assign the segmants,
+tmpCounter word 1       ; a Counter that will be used to assign the segmants,
                         ; with there nums for the paint function
 ;------------------------------------------------------------------------------------------------------------
 
@@ -40,8 +40,11 @@ levels  BYTE "1. None", 0Dh, 0Ah, "2. Box", 0Dh, 0Ah, "3. camera frame", 0Dh, 0A
 speeds BYTE "1", 0Dh, 0Ah, "2", 0Dh, 0Ah, "3",
              0Dh, 0Ah, "4", 0Dh, 0Ah, 0
 hitS    BYTE "Game Over!", 0
+high    BYTE "Highest Score: 0",0
 scoreS  BYTE "Score: 0", 0
 gamespeed DWORD   60 ;
+
+highestScore DWORD 0
 
 eTail   BYTE    1d  
 search  WORD    0d 
@@ -366,10 +369,16 @@ MoveSnake PROC USES EDX EAX EBX
     hit: 
         MOV EAX, 4000           ; Set delay time to 4000ms
         MOV DH, 24              ; Move cursor to new location, to write game over
-        MOV DL, 11              ; message
+        MOV DL, 40              ; message
         CALL GotoXY
         MOV EDX, OFFSET hitS
         CALL WriteString
+        .IF cScore > highestScore
+            MOV DH, 24
+            MOV DL, 25
+            MOV EAX, cScore
+            CALL WriteDec
+        .ENDIF
 
         CALL Delay              ; Call delay to pause game for 4 seconds
         MOV eGame, 1            ; Set end game flag
@@ -739,6 +748,13 @@ CalcIndex PROC USES EAX EDX
     CALL GotoXY
 
     MOV EDX, OFFSET scoreS
+    CALL WriteString
+
+    MOV DH, 24
+    MOV DL, 10
+    CALL GotoXY
+
+    MOV EDX, OFFSET highS
     CALL WriteString
 
     INVOKE getStdHandle, STD_INPUT_HANDLE

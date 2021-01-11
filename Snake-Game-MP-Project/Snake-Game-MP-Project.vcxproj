@@ -101,7 +101,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Users\abd el rahman\Downloads\Irvine;%(AdditionalLibraryDirectories);E:\college\Microprocessors\project\Irvine</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>E:\college\Microprocessors\project\Irvine</AdditionalLibraryDirectories>
       <AdditionalDependencies>Irvine32.lib</AdditionalDependencies>
     </Link>
     <MASM>
@@ -123,7 +123,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>Irvine32.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>;E:\college\Microprocessors\project\Irvine</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>E:\college\Microprocessors\project\Irvine</AdditionalLibraryDirectories>
     </Link>
     <MASM>
       <IncludePaths>E:\college\Microprocessors\project\Irvine</IncludePaths>
@@ -140,7 +140,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>Irvine32.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>;E:\college\Microprocessors\project\Irvine</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>E:\college\Microprocessors\project\Irvine</AdditionalLibraryDirectories>
     </Link>
     <MASM>
       <IncludePaths>E:\college\Microprocessors\project\Irvine</IncludePaths>
@@ -161,7 +161,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>Irvine32.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>;E:\college\Microprocessors\project\Irvine</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>E:\college\Microprocessors\project\Irvine</AdditionalLibraryDirectories>
     </Link>
     <MASM>
       <IncludePaths>E:\college\Microprocessors\project\Irvine</IncludePaths>
