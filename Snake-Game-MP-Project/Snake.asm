@@ -375,7 +375,6 @@ MoveSnake PROC USES EDX EAX EBX
         MOV EAX, cScore
         .IF EAX > highestScore
             MOV highestScore, EAX
-            MOV hFlag, 1
         .ENDIF
 
         CALL Delay              ; Call delay to pause game for 4 seconds

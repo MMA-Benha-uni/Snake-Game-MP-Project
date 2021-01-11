@@ -103,6 +103,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>E:\college\Microprocessors\project\Irvine</AdditionalLibraryDirectories>
       <AdditionalDependencies>Irvine32.lib</AdditionalDependencies>
+      <EntryPointSymbol>main</EntryPointSymbol>
     </Link>
     <MASM>
       <IncludePaths>E:\college\Microprocessors\project\Irvine</IncludePaths>
@@ -124,6 +125,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>Irvine32.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>E:\college\Microprocessors\project\Irvine</AdditionalLibraryDirectories>
+      <EntryPointSymbol>main</EntryPointSymbol>
     </Link>
     <MASM>
       <IncludePaths>E:\college\Microprocessors\project\Irvine</IncludePaths>
@@ -141,6 +143,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>Irvine32.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>E:\college\Microprocessors\project\Irvine</AdditionalLibraryDirectories>
+      <EntryPointSymbol>main</EntryPointSymbol>
     </Link>
     <MASM>
       <IncludePaths>E:\college\Microprocessors\project\Irvine</IncludePaths>
@@ -162,6 +165,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>Irvine32.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>E:\college\Microprocessors\project\Irvine</AdditionalLibraryDirectories>
+      <EntryPointSymbol>main</EntryPointSymbol>
     </Link>
     <MASM>
       <IncludePaths>E:\college\Microprocessors\project\Irvine</IncludePaths>
