@@ -40,7 +40,7 @@ levels  BYTE "1. None", 0Dh, 0Ah, "2. Box", 0Dh, 0Ah, "3. camera frame", 0Dh, 0A
 speeds BYTE "1", 0Dh, 0Ah, "2", 0Dh, 0Ah, "3",
              0Dh, 0Ah, "4", 0Dh, 0Ah, 0
 hitS    BYTE "Game Over!", 0
-high    BYTE "Highest Score: 0",0
+highS    BYTE "Highest Score: 0",0
 scoreS  BYTE "Score: 0", 0
 gamespeed DWORD   60 ;
 
@@ -52,8 +52,8 @@ eGame   BYTE    0d
 cScore  DWORD   0d  
 d       BYTE    'w' 
 newD    BYTE    'w' 
-foodR BYTE 0           
-foodC BYTE 0  
+foodR   BYTE    0           
+foodC   BYTE    0  
 
 myHandle DWORD ?
 numInp   DWORD ?    
@@ -373,10 +373,10 @@ MoveSnake PROC USES EDX EAX EBX
         CALL GotoXY
         MOV EDX, OFFSET hitS
         CALL WriteString
-        .IF cScore > highestScore
+        MOV EAX, cScore
+        .IF EAX > highestScore
             MOV DH, 24
             MOV DL, 25
-            MOV EAX, cScore
             CALL WriteDec
         .ENDIF
 
